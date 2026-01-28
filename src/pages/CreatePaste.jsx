@@ -6,20 +6,16 @@ export default function CreatePaste() {
   const [content, setContent] = useState("");
   const [ttl, setTtl] = useState("");
   const [views, setViews] = useState("");
-  const [url, setUrl] = useState("");
   const navigate = useNavigate(); 
   const submit = async () => {
     try {
       const res = await api.post("/api/pastes", {
         content,
         ttl_seconds: ttl || null,
-        max_views: views || null,
+        max_views: views || null
       });
 
-      setUrl(res.data.url);
-
-      
-      const pasteId = res.data.url.split("/").pop();
+      const pasteId = res.data.id;
       navigate(`/paste/${pasteId}`);
 
     } catch (err) {
