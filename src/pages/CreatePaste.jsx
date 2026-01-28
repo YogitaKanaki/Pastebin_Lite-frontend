@@ -16,10 +16,10 @@ export default function CreatePaste() {
         max_views: views || null
       });
 
-      setUrl(res.data.url);
+      const pasteUrl = res.data.url; 
+    setUrl(pasteUrl);
 
-      const pasteId = res.data.url.split("/").pop();
-      navigate(`/pastes/${pasteId}`);
+    navigate(pasteUrl); 
 
     } catch (err) {
       console.error(err);
