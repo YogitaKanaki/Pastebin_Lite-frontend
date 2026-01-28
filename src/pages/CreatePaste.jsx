@@ -1,20 +1,33 @@
 import api from "../api/axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; 
 
 export default function CreatePaste() {
   const [content, setContent] = useState("");
   const [ttl, setTtl] = useState("");
   const [views, setViews] = useState("");
   const [url, setUrl] = useState("");
-
+  const navigate = useNavigate(); 
   const submit = async () => {
-    const res = await api.post("/api/pastes", {
-      content,
-      ttl_seconds: ttl || null,
-      max_views: views || null,
-    });
-    setUrl(res.data.url);
+    try {
+      const res = await api.post("/api/pastes", {
+        content,
+        ttl_seconds: ttl || null,
+        max_views: views || null,
+      });
+
+      setUrl(res.data.url);
+
+      
+      const pasteId = res.data.url.split("/").pop();
+      navigate(`/paste/${pasteId}`);
+
+    } catch (err) {
+      console.error(err);
+      alert("Failed to create paste");
+    }
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
