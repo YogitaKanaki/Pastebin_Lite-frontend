@@ -16,7 +16,9 @@ export default function CreatePaste() {
         max_views: views || null
       });
 
-      const pasteId = res.data.id;
+      setUrl(res.data.url);
+
+      const pasteId = res.data.url.split("/").pop();
       navigate(`/pastes/${pasteId}`);
 
     } catch (err) {
