@@ -6,6 +6,7 @@ export default function CreatePaste() {
   const [content, setContent] = useState("");
   const [ttl, setTtl] = useState("");
   const [views, setViews] = useState("");
+  const [url, setUrl] = useState(""); 
   const navigate = useNavigate(); 
   const submit = async () => {
     try {
