@@ -11,15 +11,17 @@ export default function CreatePaste() {
   const submit = async () => {
     try {
       const res = await api.post("/api/pastes", {
-        content,
-        ttl_seconds: ttl || null,
-        max_views: views || null
-      });
+  content,
+  ttl_seconds: ttl || null,
+  max_views: views || null
+});
 
-      const pasteUrl = res.data.url; 
-    setUrl(pasteUrl);
+const pasteId = res.data.url.split("/").pop();  // from backend URL
+navigate(`/pastes/${pasteId}`);
 
-    navigate(pasteUrl); 
+// Optional: show frontend share link instead of backend link
+setUrl(`${window.location.origin}/pastes/${pasteId}`);
+
 
     } catch (err) {
       console.error(err);
