@@ -16,7 +16,7 @@ export default function CreatePaste() {
       });
 
       const pasteId = res.data.id;
-      navigate(`/paste/${pasteId}`);
+      navigate(`/pastes/${pasteId}`);
 
     } catch (err) {
       console.error(err);
