@@ -1,33 +1,36 @@
 import api from "../api/axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; 
 
 export default function CreatePaste() {
   const [content, setContent] = useState("");
   const [ttl, setTtl] = useState("");
   const [views, setViews] = useState("");
-  const navigate = useNavigate();
-
+  const [url, setUrl] = useState(""); 
+  const navigate = useNavigate(); 
   const submit = async () => {
-    try {
-      if (!content.trim()) {
-        alert("Content cannot be empty");
-        return;
-      }
+  try {
+    const res = await api.post("/api/pastes", {
+      content,
+      ttl_seconds: ttl ? Number(ttl) : null,
+      max_views: views ? Number(views) : null
+    });
 
-      const res = await api.post("/api/pastes", {
-        content,
-        ttl_seconds: ttl ? Number(ttl) : null,
-        max_views: views ? Number(views) : null
-      });
+    const pasteId = res.data.id;
+    //navigate(`/p/${pasteId}`);
+    setUrl(`${window.location.origin}/p/${pasteId}`);
+    // navigate after 2 seconds
+    setTimeout(() => {
+      navigate(`/p/${pasteId}`);
+    }, 2000); // 2000 ms = 2 seconds
+  } catch (err) {
+    console.error(err);
+    alert(err?.response?.data?.error || "Failed to create paste");
+    console.log("API BASE:", process.env.REACT_APP_API_BASE_URL);
+  }
+};
 
-      // Redirect to shareable URL (/p/:id)
-      navigate(`/p/${res.data.id}`);
-    } catch (err) {
-      console.error(err);
-      alert(err?.response?.data?.error || "Failed to create paste");
-    }
-  };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -38,21 +41,18 @@ export default function CreatePaste() {
           className="w-full border p-2 mb-2"
           rows="5"
           placeholder="Paste your content here..."
-          value={content}
           onChange={(e) => setContent(e.target.value)}
         />
 
         <input
           className="w-full border p-2 mb-2"
           placeholder="TTL (seconds)"
-          value={ttl}
           onChange={(e) => setTtl(e.target.value)}
         />
 
         <input
           className="w-full border p-2 mb-2"
           placeholder="Max Views"
-          value={views}
           onChange={(e) => setViews(e.target.value)}
         />
 
@@ -62,6 +62,21 @@ export default function CreatePaste() {
         >
           Create
         </button>
+
+        {url && (
+          <p className="mt-3 text-sm break-all">
+            Share:{" "}
+            <a
+              className="text-blue-500 underline"
+              href={url}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {url}
+            </a>
+          </p>
+          
+        )}
       </div>
     </div>
   );
