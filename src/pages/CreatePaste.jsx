@@ -26,6 +26,8 @@ setUrl(`${window.location.origin}/pastes/${pasteId}`);
     } catch (err) {
       console.error(err);
       alert("Failed to create paste");
+      console.log("API BASE:", process.env.REACT_APP_API_BASE_URL);
+
     }
   };
 
@@ -73,6 +75,7 @@ setUrl(`${window.location.origin}/pastes/${pasteId}`);
               {url}
             </a>
           </p>
+          
         )}
       </div>
     </div>
