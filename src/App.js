@@ -7,7 +7,7 @@ function App() {
     
       <Routes>
         <Route path="/" element={<CreatePaste />} />
-        <Route path="/pastes/:id" element={<ViewPaste />} />
+        <Route path="/p/:id" element={<ViewPaste />} />
       </Routes>
   
   );

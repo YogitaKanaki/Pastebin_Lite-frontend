@@ -9,27 +9,23 @@ export default function CreatePaste() {
   const [url, setUrl] = useState(""); 
   const navigate = useNavigate(); 
   const submit = async () => {
-    try {
-      const res = await api.post("/api/pastes", {
-  content,
-  ttl_seconds: ttl || null,
-  max_views: views || null
-});
+  try {
+    const res = await api.post("/api/pastes", {
+      content,
+      ttl_seconds: ttl ? Number(ttl) : null,
+      max_views: views ? Number(views) : null
+    });
 
-const pasteId = res.data.url.split("/").pop();  // from backend URL
-navigate(`/pastes/${pasteId}`);
+    const pasteId = res.data.id;
+    navigate(`/p/${pasteId}`);
+    setUrl(`${window.location.origin}/p/${pasteId}`);
+  } catch (err) {
+    console.error(err);
+    alert(err?.response?.data?.error || "Failed to create paste");
+    console.log("API BASE:", process.env.REACT_APP_API_BASE_URL);
+  }
+};
 
-// Optional: show frontend share link instead of backend link
-setUrl(`${window.location.origin}/pastes/${pasteId}`);
-
-
-    } catch (err) {
-      console.error(err);
-      alert("Failed to create paste");
-      console.log("API BASE:", process.env.REACT_APP_API_BASE_URL);
-
-    }
-  };
 
 
   return (
